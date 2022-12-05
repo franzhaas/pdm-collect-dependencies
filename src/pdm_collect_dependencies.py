@@ -19,7 +19,6 @@ class CollectDependencies(BaseCommand):
         pf = unearth.PackageFinder(index_urls=[item["url"] for item in project.sources])
         urls = ((item["url"], item["hash"]) for item in itertools.chain.from_iterable(files.values()))
         urls = (item for item in urls if item[0][-3:]=="whl")
-        urls = (item for item in urls if item[0][:4]=="http")
         links = ((unearth.Link(item[0]), item[1]) for item in urls)
         with project.environment.get_finder(ignore_compatibility=True) as pf: 
             for current_link, hash in  links:
@@ -33,4 +32,4 @@ class CollectDependencies(BaseCommand):
                     project.core.ui.echo("ERROR: hash mismatch", style="error")
                     exit(1)
         project.core.ui.echo("Collected all wheels...", style="success")
-        
+
