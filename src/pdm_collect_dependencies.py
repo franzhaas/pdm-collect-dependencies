@@ -21,13 +21,14 @@ class CollectDependencies(BaseCommand):
         urls = (item for item in urls if item[0][-3:]=="whl")
         urls = (item for item in urls if item[0][:4]=="http")
         links = ((unearth.Link(item[0]), item[1]) for item in urls)
-        for current_link, hash in  links:
-            wpath = pf.download_and_unpack(current_link, target_dir, target_dir)
-            with open(wpath, "rb") as f:
-                hashtype, hashval = hash.split(":")
-                h = hashlib.new(hashtype)
-                h.update(f.read())
-            digest = h.hexdigest()
-            if hashval != digest:
-                print("ERROR: hash mismatch")
-                exit(1)
+        with project.environment.get_finder(ignore_compatibility=True) as pf: 
+            for current_link, hash in  links:
+                wpath = pf.download_and_unpack(current_link, target_dir, target_dir)
+                with open(wpath, "rb") as f:
+                    hashtype, hashval = hash.split(":")
+                    h = hashlib.new(hashtype)
+                    h.update(f.read())
+                digest = h.hexdigest()
+                if hashval != digest:
+                    project.core.ui.echo("ERROR: hash mismatch")
+                    exit(1)
