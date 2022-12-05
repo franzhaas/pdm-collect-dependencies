@@ -32,3 +32,5 @@ class CollectDependencies(BaseCommand):
                 if hashval != digest:
                     project.core.ui.echo("ERROR: hash mismatch", style="error")
                     exit(1)
+        project.core.ui.echo("Collected all wheels...", style="success")
+        
