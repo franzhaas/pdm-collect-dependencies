@@ -30,5 +30,5 @@ class CollectDependencies(BaseCommand):
                     h.update(f.read())
                 digest = h.hexdigest()
                 if hashval != digest:
-                    project.core.ui.echo("ERROR: hash mismatch")
+                    project.core.ui.echo("ERROR: hash mismatch", style="error")
                     exit(1)
