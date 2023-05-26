@@ -17,9 +17,17 @@ class CollectDependencies(BaseCommand):
         target_dir = options.collect_dependencies_dir
         files = project.lockfile["metadata"]["files"]
         pf = unearth.PackageFinder(index_urls=[item.url for item in project.sources])
-        urls = ((item["url"], item["hash"]) for item in itertools.chain.from_iterable(files.values()))
-        urls = (item for item in urls if item[0][-3:]=="whl")
-        links = ((unearth.Link(item[0]), item[1]) for item in urls)
+        
+        def _collector(files):
+            for node in files.values():
+                for item in node:
+                    project.core.ui.echo(item, style="success")
+                    if item["url"][-3:]=="whl":
+                        yield item["url"], item["hash"] 
+                        break
+                      
+        
+        links = ((unearth.Link(item[0]), item[1]) for item in _collector(files))
         with project.environment.get_finder(ignore_compatibility=True) as pf: 
             for current_link, hash in  links:
                 wpath = pf.download_and_unpack(current_link, target_dir, target_dir)
