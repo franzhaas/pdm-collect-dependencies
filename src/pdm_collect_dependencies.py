@@ -21,7 +21,6 @@ class CollectDependencies(BaseCommand):
         def _collector(files):
             for node in files.values():
                 for item in node:
-                    project.core.ui.echo(item, style="success")
                     if item["url"][-3:]=="whl":
                         yield item["url"], item["hash"] 
                         break
