@@ -1,6 +1,6 @@
 [project]
 name = "pdm-collect-dependencies"
-version = "0.1.7"
+version = "0.1.8"
 description = "pdm plugin to collect the wheels referenced in a pdm.lock file"
 authors = [
     {name = "franz haas", email = "franz.dominik.haas@gmail.com"},
