@@ -16,7 +16,7 @@ class CollectDependencies(BaseCommand):
     def handle(self, project, options):
         target_dir = options.collect_dependencies_dir
         files = project.lockfile["metadata"]["files"]
-        pf = unearth.PackageFinder(index_urls=[item["url"] for item in project.sources])
+        pf = unearth.PackageFinder(index_urls=[item.url for item in project.sources])
         urls = ((item["url"], item["hash"]) for item in itertools.chain.from_iterable(files.values()))
         urls = (item for item in urls if item[0][-3:]=="whl")
         links = ((unearth.Link(item[0]), item[1]) for item in urls)
