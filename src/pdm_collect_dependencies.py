@@ -12,6 +12,7 @@ class CollectDependencies(BaseCommand):
     """"""
     def add_arguments(self, parser):
         parser.add_argument("-d", "--collect_dependencies_dir", help="Directory to collect the wheels in.")
+        parser.add_argument("-w", "--which_wheels", default="first", help="Directory to collect the wheels in.")
 
     def handle(self, project, options):
         target_dir = options.collect_dependencies_dir
@@ -23,7 +24,8 @@ class CollectDependencies(BaseCommand):
                 for item in node:
                     if item["url"][-3:]=="whl":
                         yield item["url"], item["hash"] 
-                        break
+                        if not options.which_wheels == "all":
+                            break
                       
         
         links = ((unearth.Link(item[0]), item[1]) for item in _collector(files))
@@ -39,4 +41,3 @@ class CollectDependencies(BaseCommand):
                     project.core.ui.echo("ERROR: hash mismatch", style="error")
                     exit(1)
         project.core.ui.echo("Collected all wheels...", style="success")
-
